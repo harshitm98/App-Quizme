@@ -13,7 +13,5 @@ public class QuestionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
 
-        sampleText = (TextView)findViewById(R.id.trial_text);
-        sampleText.setText(MainActivity.questionSet);
     }
 }

@@ -3,12 +3,14 @@ package com.example.android.quizme;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.client.result.TextParsedResult;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -17,8 +19,9 @@ public class MainActivity extends AppCompatActivity {
     private Button scanButton;
     private IntentIntegrator qrScan;
     public static String questionSet;
-    private TextView textViewQuestionSet;
     private Button nextActivityButton;
+    public static EditText registrationNumber;
+    public static EditText name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +29,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         scanButton = (Button)findViewById(R.id.scanner);
-        textViewQuestionSet = (TextView)findViewById(R.id.question_set);
         nextActivityButton = (Button)findViewById(R.id.next_activity);
         nextActivityButton.setEnabled(false);
-
+        registrationNumber = (EditText)findViewById(R.id.registration_number);
+        name = (EditText)findViewById(R.id.name);
         qrScan = new IntentIntegrator(this);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 qrScan.initiateScan();
+            }
+        });
+
+        nextActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this,QuestionsActivity.class);
+                startActivity(i);
             }
         });
     }
@@ -49,14 +60,23 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 questionSet = result.getContents();
-                textViewQuestionSet.setText("Your set is: Set " + questionSet);
 
                 if(questionSet!=null){
-                    nextActivityButton.setEnabled(true);
+                    checker();
                 }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    public void checker(){
+        if((name.getText().toString() == null) || (registrationNumber.getText().toString() == null)){
+            Toast.makeText(this,"Please fill name and registeration number and then scan the QR code again!",Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(this,registrationNumber.getText().toString() + name.getText().toString(),Toast.LENGTH_LONG).show();
+            nextActivityButton.setEnabled(true);
         }
     }
 
