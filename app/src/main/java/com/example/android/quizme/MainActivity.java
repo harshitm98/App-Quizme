@@ -16,8 +16,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Button scanButton;
     private IntentIntegrator qrScan;
-    private String questionSet;
+    public static String questionSet;
     private TextView textViewQuestionSet;
+    private Button nextActivityButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         scanButton = (Button)findViewById(R.id.scanner);
         textViewQuestionSet = (TextView)findViewById(R.id.question_set);
+        nextActivityButton = (Button)findViewById(R.id.next_activity);
+        nextActivityButton.setEnabled(false);
 
         qrScan = new IntentIntegrator(this);
 
@@ -47,9 +50,15 @@ public class MainActivity extends AppCompatActivity {
             else{
                 questionSet = result.getContents();
                 textViewQuestionSet.setText("Your set is: Set " + questionSet);
+
+                if(questionSet!=null){
+                    nextActivityButton.setEnabled(true);
+                }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
 }
