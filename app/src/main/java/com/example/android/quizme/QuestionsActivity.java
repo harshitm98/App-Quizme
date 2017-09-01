@@ -1,6 +1,7 @@
 package com.example.android.quizme;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,28 +24,17 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 
 public class QuestionsActivity extends AppCompatActivity {
 
     private TextView questionText;
     private ImageView questionImage;
-//    private Button buttonA, buttonB, buttonC, buttonD;
     private String set;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mQuestionsDatabaseReference, mCandidateDatabaseReference, mInfoCandidateReference;
     private ChildEventListener mChildEventListener;
-
-    public QuestionDbHelper mDbHelper;
-    public SQLiteDatabase database;
-    private ContentValues values;
-
-    public Cursor cursor;
-    public int questionTextColumns;
-    public int optionAColumns;
-    public int optionBColumns;
-    public int optionCColumns;
-    public int optionDColumns;
 
     public ArrayList<QuestionObject> questionObjects;
 
@@ -52,9 +43,10 @@ public class QuestionsActivity extends AppCompatActivity {
 
     int[] questionSequence = {1,2,3,4,5,6,7,8,9,10};
 
+    public String correctAnswer = "";
+    public String selectedAnswer = "";
 
-
-    int questionSolved=0;
+    public static int questionSolved = 0;
     int questionsAttempted;
 
     @Override
@@ -70,8 +62,6 @@ public class QuestionsActivity extends AppCompatActivity {
         textViewQuestion = (TextView)findViewById(R.id.question_text);
 
         set = "set" + MainActivity.questionSet;
-        mDbHelper = new QuestionDbHelper(this);
-        database = mDbHelper.getWritableDatabase();
         questionObjects = new ArrayList<QuestionObject>();
 
         ArrayList<Integer> questionSequenceShuffle = new ArrayList<>();
@@ -103,15 +93,6 @@ public class QuestionsActivity extends AppCompatActivity {
                     displayQuestions(0);
                 }
 
-//                values = new ContentValues();
-//                values.put(DatabaseContract.USERS_QUESTION_TEXT,questionObject.getQuestionText());
-//                values.put(DatabaseContract.USERS_CORRECT_ANSWER,questionObject.getCorrect_answer());
-//                values.put(DatabaseContract.USERS_OPTION_A,questionObject.getOptionA());
-//                values.put(DatabaseContract.USERS_OPTION_B,questionObject.getOptionB());
-//                values.put(DatabaseContract.USERS_OPTION_C,questionObject.getOptionC());
-//                values.put(DatabaseContract.USERS_OPTION_D,questionObject.getOptionD());
-
-
 
             }
 
@@ -129,27 +110,64 @@ public class QuestionsActivity extends AppCompatActivity {
         };
         mQuestionsDatabaseReference.addChildEventListener(mChildEventListener);
 
-//        for(int j=0;j<questionObjects.size();j++){
-//            Log.i("MainActivity", questionObjects.get(j).getCorrect_answer());
-//            Log.i("MainActivity", questionObjects.get(j).getQuestionText());
-//        }
-       // readQuestions();
-        //readParticularQuestion(2);
-
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 questionsAttempted++;
-                displayQuestions(questionsAttempted);
+                if(Objects.equals(correctAnswer, selectedAnswer)){
+                    questionSolved++;
+                }
+                if(questionsAttempted < 10){
+                    displayQuestions(questionsAttempted);
+                }
+                else{
+                    Intent i = new Intent(QuestionsActivity.this, FinalResultActivity.class);
+                    startActivity(i);
+                    finishAffinity();
+                }
+
             }
         });
 
+        buttonA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                next.setEnabled(true);
+                selectedAnswer = buttonA.getText().toString();
+            }
+        });
+
+        buttonB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                next.setEnabled(true);
+                selectedAnswer = buttonB.getText().toString();
+            }
+        });
+
+        buttonC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                next.setEnabled(true);
+                selectedAnswer = buttonC.getText().toString();
+            }
+        });
+
+        buttonD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                next.setEnabled(true);
+                selectedAnswer = buttonD.getText().toString();
+            }
+        });
+
+
     }
 
-    public void displayQuestions(int k){
+    public void displayQuestions(int k) {
 
-
-        String[] option = {questionObjects.get(k).getOptionA(),questionObjects.get(k).getOptionB(),questionObjects.get(k).getOptionC(),questionObjects.get(k).getOptionD()};
+        next.setEnabled(false);
+        String[] option = {questionObjects.get(k).getOptionA(), questionObjects.get(k).getOptionB(), questionObjects.get(k).getOptionC(), questionObjects.get(k).getOptionD()};
         ArrayList<String> optionList = new ArrayList<String>(Arrays.asList(option));
         Collections.shuffle(optionList);
 
@@ -158,61 +176,8 @@ public class QuestionsActivity extends AppCompatActivity {
         buttonC.setText(optionList.get(2));
         buttonD.setText(optionList.get(3));
         textViewQuestion.setText(questionObjects.get(k).getQuestionText());
+        correctAnswer = questionObjects.get(k).getCorrect_answer();
     }
-
-
-
-    public void readParticularQuestion(int i){
-//        cursor.moveToPosition(i);
-//        String questionText = cursor.getString(questionTextColumns);
-//        String optionA = cursor.getString(optionAColumns);
-//        String optionB = cursor.getString(optionBColumns);
-//        String optionC = cursor.getString(optionCColumns);
-//        String optionD = cursor.getString(optionDColumns);
-//
-//        Log.i("MainActivity", optionA);
-//        Log.i("MainActivity", optionB);
-//        Log.i("MainActivity", optionC);
-//        Log.i("MainActivity", optionD);
-//
-//
-//        String options[] =  { optionA, optionB, optionC, optionD};
-
-//
-//        buttonA.setText(optionList.get(0));
-//        buttonB.setText(optionList.get(1));
-//        buttonC.setText(optionList.get(2));
-//        buttonD.setText(optionList.get(3));
-//        textViewQuestion.setText(questionText);
-
-    }
-//
-//    public void readQuestions(){
-//        String[] projection = {
-//                DatabaseContract.USERS_QUESTION_TEXT,
-//                DatabaseContract.USERS_OPTION_A,
-//                DatabaseContract.USERS_OPTION_B,
-//                DatabaseContract.USERS_OPTION_C,
-//                DatabaseContract.USERS_OPTION_D,
-//                DatabaseContract.USERS_CORRECT_ANSWER
-//        };
-//
-//        cursor = database.query(
-//                DatabaseContract.QUESTIONS_TABLE_NAME ,
-//                projection,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null
-//        );
-//
-//        questionTextColumns = cursor.getColumnIndex(DatabaseContract.USERS_QUESTION_TEXT);
-//        optionAColumns = cursor.getColumnIndex(DatabaseContract.USERS_OPTION_A);
-//        optionBColumns = cursor.getColumnIndex(DatabaseContract.USERS_OPTION_B);
-//        optionCColumns = cursor.getColumnIndex(DatabaseContract.USERS_OPTION_C);
-//        optionDColumns = cursor.getColumnIndex(DatabaseContract.USERS_OPTION_D);
-//    }
 
 
     @Override
