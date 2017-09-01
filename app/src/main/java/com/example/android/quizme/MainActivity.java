@@ -1,6 +1,7 @@
 package com.example.android.quizme;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -20,8 +23,11 @@ public class MainActivity extends AppCompatActivity {
     private IntentIntegrator qrScan;
     public static String questionSet;
     private Button nextActivityButton;
+    public static String mRegistrationNumber, mName;
     public static EditText registrationNumber;
     public static EditText name;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mCandidateReference, mInfoReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         name = (EditText)findViewById(R.id.name);
         qrScan = new IntentIntegrator(this);
 
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mCandidateReference = mFirebaseDatabase.getReference().child("candidates");
+
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -42,13 +51,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        mRegistrationNumber  = registrationNumber.getText().toString();
+        mName = name.getText().toString();
+
         nextActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mCandidateReference.child(registrationNumber.getText().toString());
+                mInfoReference = mCandidateReference.child(registrationNumber.getText().toString());
+                mInfoReference.child("name").setValue(name.getText().toString());
+                mInfoReference.child("freeze").setValue(false);
+                mInfoReference.child("questions_solved").setValue(0);
                 Intent i = new Intent(MainActivity.this,QuestionsActivity.class);
                 startActivity(i);
+                finish();
             }
         });
+
     }
 
     @Override
