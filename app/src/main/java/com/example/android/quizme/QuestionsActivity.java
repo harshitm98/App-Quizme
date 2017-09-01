@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class QuestionsActivity extends AppCompatActivity {
 
 
     int questionSolved=0;
+    int questionsAttempted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,7 @@ public class QuestionsActivity extends AppCompatActivity {
 
                 if(questionObjects.size() == 10){
                     Collections.shuffle(questionObjects);
-                    displayQuestions();
+                    displayQuestions(0);
                 }
 
 //                values = new ContentValues();
@@ -134,12 +136,20 @@ public class QuestionsActivity extends AppCompatActivity {
        // readQuestions();
         //readParticularQuestion(2);
 
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                questionsAttempted++;
+                displayQuestions(questionsAttempted);
+            }
+        });
+
     }
 
-    public void displayQuestions(){
+    public void displayQuestions(int k){
 
 
-        String[] option = {questionObjects.get(0).getOptionA(),questionObjects.get(0).getOptionB(),questionObjects.get(0).getOptionC(),questionObjects.get(0).getOptionD()};
+        String[] option = {questionObjects.get(k).getOptionA(),questionObjects.get(k).getOptionB(),questionObjects.get(k).getOptionC(),questionObjects.get(k).getOptionD()};
         ArrayList<String> optionList = new ArrayList<String>(Arrays.asList(option));
         Collections.shuffle(optionList);
 
@@ -147,8 +157,10 @@ public class QuestionsActivity extends AppCompatActivity {
         buttonB.setText(optionList.get(1));
         buttonC.setText(optionList.get(2));
         buttonD.setText(optionList.get(3));
-        textViewQuestion.setText(questionObjects.get(0).getQuestionText());
+        textViewQuestion.setText(questionObjects.get(k).getQuestionText());
     }
+
+
 
     public void readParticularQuestion(int i){
 //        cursor.moveToPosition(i);
