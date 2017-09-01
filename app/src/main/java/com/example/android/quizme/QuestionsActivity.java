@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class QuestionsActivity extends AppCompatActivity {
 
-    private TextView questionText;
+    private TextView questionText, freezeText;
     private ImageView questionImage;
     private String set;
 
@@ -46,6 +46,13 @@ public class QuestionsActivity extends AppCompatActivity {
     public String correctAnswer = "";
     public String selectedAnswer = "";
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        freezeText.setVisibility(View.VISIBLE);
+
+    }
+
     public static int questionSolved = 0;
     int questionsAttempted;
 
@@ -60,6 +67,7 @@ public class QuestionsActivity extends AppCompatActivity {
         buttonD = (Button)findViewById(R.id.option_d);
         next = (Button)findViewById(R.id.next);
         textViewQuestion = (TextView)findViewById(R.id.question_text);
+        freezeText = (TextView)findViewById(R.id.freeze);
 
         set = "set" + MainActivity.questionSet;
         questionObjects = new ArrayList<QuestionObject>();

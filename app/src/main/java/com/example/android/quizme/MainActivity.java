@@ -17,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button scanButton;
@@ -52,12 +54,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mRegistrationNumber  = registrationNumber.getText().toString();
-        mName = name.getText().toString();
+
 
         nextActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mRegistrationNumber  = registrationNumber.getText().toString();
+                mName = name.getText().toString();
                 mCandidateReference.child(registrationNumber.getText().toString());
                 mInfoReference = mCandidateReference.child(registrationNumber.getText().toString());
                 mInfoReference.child("name").setValue(name.getText().toString());
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checker(){
-        if((name.getText().toString() == null) || (registrationNumber.getText().toString() == null)){
+        if((Objects.equals(name.getText().toString(), "")) || (Objects.equals(registrationNumber.getText().toString(), ""))){
             Toast.makeText(this,"Please fill name and registeration number and then scan the QR code again!",Toast.LENGTH_LONG).show();
         }
         else{

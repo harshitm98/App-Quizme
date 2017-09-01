@@ -1,83 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.example.android.quizme.QuestionsActivity">
 
-    
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/question_text"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Question is made of random things and here comes a ton of random things"/>
+            android:layout_weight="5"
+            android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:src="@mipmap/ic_launcher" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/option_a"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="option a" />
-
-        <Button
-            android:id="@+id/option_b"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="option b" />
-
-        <Button
-            android:id="@+id/option_c"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="option c" />
-
-        <Button
-            android:id="@+id/option_d"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="option d" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/next"
+            <TextView
+                android:id="@+id/question_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="NEXT" />
+                android:text="Question is made of random things and here comes a ton of random things"/>
 
-        </RelativeLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:src="@mipmap/ic_launcher" />
 
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical">
 
+            <Button
+                android:id="@+id/option_a"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="option a" />
+
+            <Button
+                android:id="@+id/option_b"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="option b" />
+
+            <Button
+                android:id="@+id/option_c"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="option c" />
+
+            <Button
+                android:id="@+id/option_d"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="option d" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="NEXT" />
+
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:id = "@+id/freeze"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Your test has been FREEZED"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:background="@android:color/white"/>
 
-</LinearLayout>
+
+</RelativeLayout>
