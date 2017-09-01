@@ -84,12 +84,21 @@ public class QuestionsActivity extends AppCompatActivity {
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                QuestionObject questionObject = dataSnapshot.getValue(QuestionObject.class);
+                QuestionObject questionObject = new QuestionObject();
+                questionObject.setQuestion_text(dataSnapshot.child("question_text").getValue().toString());
+                questionObject.setCorrect_answer(dataSnapshot.child("correct_answer").getValue().toString());
+                questionObject.setOption1(dataSnapshot.child("option1").getValue().toString());
+                questionObject.setOption2(dataSnapshot.child("option2").getValue().toString());
+                questionObject.setOption3(dataSnapshot.child("option3").getValue().toString());
+                questionObject.setOption4(dataSnapshot.child("option4").getValue().toString());
+
+
                 questionObjects.add(questionObject);
-                Log.i("MainActivity","" + questionObject.getCorrect_answer());
+
 
                 if(questionObjects.size() == 10){
                     Collections.shuffle(questionObjects);
+                    displayQuestions();
                 }
 
 //                values = new ContentValues();
@@ -100,10 +109,7 @@ public class QuestionsActivity extends AppCompatActivity {
 //                values.put(DatabaseContract.USERS_OPTION_C,questionObject.getOptionC());
 //                values.put(DatabaseContract.USERS_OPTION_D,questionObject.getOptionD());
 
-//                Log.i("MainActivity",questionObject.getOptionA());
-//                Log.i("MainActivity",questionObject.getOptionB());
-//                Log.i("MainActivity",questionObject.getOptionC());
-//                Log.i("MainActivity",questionObject.getOptionD());
+
 
             }
 
@@ -130,6 +136,20 @@ public class QuestionsActivity extends AppCompatActivity {
 
     }
 
+    public void displayQuestions(){
+
+
+        String[] option = {questionObjects.get(0).getOptionA(),questionObjects.get(0).getOptionB(),questionObjects.get(0).getOptionC(),questionObjects.get(0).getOptionD()};
+        ArrayList<String> optionList = new ArrayList<String>(Arrays.asList(option));
+        Collections.shuffle(optionList);
+
+        buttonA.setText(optionList.get(0));
+        buttonB.setText(optionList.get(1));
+        buttonC.setText(optionList.get(2));
+        buttonD.setText(optionList.get(3));
+        textViewQuestion.setText(questionObjects.get(0).getQuestionText());
+    }
+
     public void readParticularQuestion(int i){
 //        cursor.moveToPosition(i);
 //        String questionText = cursor.getString(questionTextColumns);
@@ -145,8 +165,7 @@ public class QuestionsActivity extends AppCompatActivity {
 //
 //
 //        String options[] =  { optionA, optionB, optionC, optionD};
-//        ArrayList<String> optionList = new ArrayList<String>(Arrays.asList(options));
-//        Collections.shuffle(optionList);
+
 //
 //        buttonA.setText(optionList.get(0));
 //        buttonB.setText(optionList.get(1));
