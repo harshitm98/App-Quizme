@@ -34,7 +34,7 @@ public class QuestionsActivity extends AppCompatActivity {
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mQuestionsDatabaseReference, mCandidateDatabaseReference, mInfoCandidateReference;
-    private ChildEventListener mChildEventListener;
+    private ChildEventListener mChildEventListener, mCandidateChildEventListener;
 
     public ArrayList<QuestionObject> questionObjects;
 
@@ -50,6 +50,7 @@ public class QuestionsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         freezeText.setVisibility(View.VISIBLE);
+        mCandidateDatabaseReference.child("freeze").setValue(1);
 
     }
 
@@ -81,6 +82,8 @@ public class QuestionsActivity extends AppCompatActivity {
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mQuestionsDatabaseReference = mFirebaseDatabase.getReference().child("questions").child(set);
+        mCandidateDatabaseReference = mFirebaseDatabase.getReference().child("candidates").child(MainActivity.mRegistrationNumber);
+        //Log.i("QuestionsActivity",MainActivity.mRegistrationNumber);
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -92,31 +95,53 @@ public class QuestionsActivity extends AppCompatActivity {
                 questionObject.setOption3(dataSnapshot.child("option3").getValue().toString());
                 questionObject.setOption4(dataSnapshot.child("option4").getValue().toString());
 
-
                 questionObjects.add(questionObject);
-
 
                 if(questionObjects.size() == 10){
                     Collections.shuffle(questionObjects);
                     displayQuestions(0);
                 }
-
-
             }
-
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {            }
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {            }
-
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {            }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {            }
         };
+
+        mCandidateChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String vFreeze = dataSnapshot.child("freeze").getValue(String.class);
+                Log.i("QuestionActivity", "" + dataSnapshot);
+                Log.i("QuestionActivity", "" + dataSnapshot.getValue().toString());
+
+                if(dataSnapshot.getValue().toString().equals("0")){
+                    Log.i("QuestionActivity","Check1");
+                    freezeText.setVisibility(View.GONE);
+                }
+//                if(Objects.equals(vFreeze.trim(), "0")){
+//                    freezeText.setVisibility(View.GONE);
+//                    Log.i("QuestionActivity", "Umm what is this?");
+//                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {           }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {      }
+        };
+
         mQuestionsDatabaseReference.addChildEventListener(mChildEventListener);
+        mCandidateDatabaseReference.addChildEventListener(mCandidateChildEventListener);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +149,7 @@ public class QuestionsActivity extends AppCompatActivity {
                 questionsAttempted++;
                 if(Objects.equals(correctAnswer, selectedAnswer)){
                     questionSolved++;
+                    mCandidateDatabaseReference.child("questions_solved").setValue(questionSolved);
                 }
                 if(questionsAttempted < 10){
                     displayQuestions(questionsAttempted);
@@ -168,8 +194,6 @@ public class QuestionsActivity extends AppCompatActivity {
                 selectedAnswer = buttonD.getText().toString();
             }
         });
-
-
     }
 
     public void displayQuestions(int k) {
@@ -185,10 +209,5 @@ public class QuestionsActivity extends AppCompatActivity {
         buttonD.setText(optionList.get(3));
         textViewQuestion.setText(questionObjects.get(k).getQuestionText());
         correctAnswer = questionObjects.get(k).getCorrect_answer();
-    }
-
-
-    @Override
-    public void onBackPressed() {
     }
 }

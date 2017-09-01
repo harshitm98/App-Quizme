@@ -18,7 +18,8 @@
             android:hint="Registration Number"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:inputType="textCapCharacters"/>
+            android:inputType="textCapCharacters"
+            android:text = "16BCI0039"/>
 
     <EditText
         android:id="@+id/name"
@@ -29,7 +30,8 @@
         android:layout_marginRight="52dp"
         android:layout_below="@+id/registration_number"
         android:layout_centerHorizontal="true"
-        android:inputType="textCapWords"/>
+        android:inputType="textCapWords"
+        android:text="Harshit Maheshwari"/>
 
 
 

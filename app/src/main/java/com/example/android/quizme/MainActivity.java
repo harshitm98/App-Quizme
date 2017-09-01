@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 mCandidateReference.child(registrationNumber.getText().toString());
                 mInfoReference = mCandidateReference.child(registrationNumber.getText().toString());
                 mInfoReference.child("name").setValue(name.getText().toString());
-                mInfoReference.child("freeze").setValue(false);
+                mInfoReference.child("freeze").setValue(0);
                 mInfoReference.child("questions_solved").setValue(0);
                 Intent i = new Intent(MainActivity.this,QuestionsActivity.class);
                 startActivity(i);
