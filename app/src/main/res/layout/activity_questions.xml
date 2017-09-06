@@ -24,6 +24,7 @@
                 android:text="Question is made of random things and here comes a ton of random things"/>
 
             <ImageView
+                android:id="@+id/question_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:src="@mipmap/ic_launcher" />

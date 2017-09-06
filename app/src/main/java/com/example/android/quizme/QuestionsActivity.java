@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,12 +47,22 @@ public class QuestionsActivity extends AppCompatActivity {
     public String correctAnswer = "";
     public String selectedAnswer = "";
 
+    private String photoUrl;
+
     @Override
     protected void onPause() {
         super.onPause();
+        freezeTheText();
+
+    }
+
+    public void freezeTheText(){
         freezeText.setVisibility(View.VISIBLE);
         mCandidateDatabaseReference.child("freeze").setValue(1);
+    }
 
+    @Override
+    public void onBackPressed() {
     }
 
     public static int questionSolved = 0;
@@ -69,6 +80,7 @@ public class QuestionsActivity extends AppCompatActivity {
         next = (Button)findViewById(R.id.next);
         textViewQuestion = (TextView)findViewById(R.id.question_text);
         freezeText = (TextView)findViewById(R.id.freeze);
+        questionImage = (ImageView)findViewById(R.id.question_image);
 
         set = "set" + MainActivity.questionSet;
         questionObjects = new ArrayList<QuestionObject>();
@@ -94,6 +106,7 @@ public class QuestionsActivity extends AppCompatActivity {
                 questionObject.setOption2(dataSnapshot.child("option2").getValue().toString());
                 questionObject.setOption3(dataSnapshot.child("option3").getValue().toString());
                 questionObject.setOption4(dataSnapshot.child("option4").getValue().toString());
+                questionObject.setQuestion_image(dataSnapshot.child("question_image").getValue().toString());
 
                 questionObjects.add(questionObject);
 
@@ -147,6 +160,7 @@ public class QuestionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 questionsAttempted++;
+                mCandidateDatabaseReference.child("questions_attempted").setValue(questionsAttempted);
                 if(Objects.equals(correctAnswer, selectedAnswer)){
                     questionSolved++;
                     mCandidateDatabaseReference.child("questions_solved").setValue(questionSolved);
@@ -209,5 +223,14 @@ public class QuestionsActivity extends AppCompatActivity {
         buttonD.setText(optionList.get(3));
         textViewQuestion.setText(questionObjects.get(k).getQuestionText());
         correctAnswer = questionObjects.get(k).getCorrect_answer();
+        photoUrl = questionObjects.get(k).getQuestion_image();
+        if(photoUrl.equals("null")){
+            questionImage.setVisibility(View.GONE);
+        }
+        else{
+            questionImage.setVisibility(View.VISIBLE);
+            Glide.with(QuestionsActivity.this).load(photoUrl).into(questionImage);
+        }
+
     }
 }

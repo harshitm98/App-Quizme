@@ -14,6 +14,16 @@ public class QuestionObject {
     private String option4;
     private String correct_answer;
 
+    public String getQuestion_image() {
+        return question_image;
+    }
+
+    public void setQuestion_image(String question_image) {
+        this.question_image = question_image;
+    }
+
+    private String question_image;
+
     public void setQuestion_text(String question_text) {
         this.question_text = question_text;
     }
