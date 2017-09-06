@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import org.w3c.dom.Text;
 
@@ -73,12 +76,21 @@ public class QuestionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
 
+
         buttonA = (Button)findViewById(R.id.option_a);
         buttonB = (Button)findViewById(R.id.option_b);
         buttonC = (Button)findViewById(R.id.option_c);
         buttonD = (Button)findViewById(R.id.option_d);
         next = (Button)findViewById(R.id.next);
         textViewQuestion = (TextView)findViewById(R.id.question_text);
+
+        buttonA.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
+        buttonB.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
+        buttonC.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
+        buttonD.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
+        textViewQuestion.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
+
+
         freezeText = (TextView)findViewById(R.id.freeze);
         questionImage = (ImageView)findViewById(R.id.question_image);
 
@@ -173,6 +185,10 @@ public class QuestionsActivity extends AppCompatActivity {
                     startActivity(i);
                     finishAffinity();
                 }
+                buttonA.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonB.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonC.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonD.setBackgroundColor(Color.rgb(0, 103, 91));
 
             }
         });
@@ -181,6 +197,10 @@ public class QuestionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 next.setEnabled(true);
+                buttonA.setBackgroundColor(Color.rgb(82, 199, 184));
+                buttonB.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonC.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonD.setBackgroundColor(Color.rgb(0, 103, 91));
                 selectedAnswer = buttonA.getText().toString();
             }
         });
@@ -189,6 +209,10 @@ public class QuestionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 next.setEnabled(true);
+                buttonB.setBackgroundColor(Color.rgb(82, 199, 184));
+                buttonA.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonC.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonD.setBackgroundColor(Color.rgb(0, 103, 91));
                 selectedAnswer = buttonB.getText().toString();
             }
         });
@@ -196,6 +220,10 @@ public class QuestionsActivity extends AppCompatActivity {
         buttonC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                buttonC.setBackgroundColor(Color.rgb(82, 199, 184));
+                buttonB.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonA.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonD.setBackgroundColor(Color.rgb(0, 103, 91));
                 next.setEnabled(true);
                 selectedAnswer = buttonC.getText().toString();
             }
@@ -204,6 +232,10 @@ public class QuestionsActivity extends AppCompatActivity {
         buttonD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                buttonD.setBackgroundColor(Color.rgb(82, 199, 184));
+                buttonB.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonC.setBackgroundColor(Color.rgb(0, 103, 91));
+                buttonA.setBackgroundColor(Color.rgb(0, 103, 91));
                 next.setEnabled(true);
                 selectedAnswer = buttonD.getText().toString();
             }
@@ -211,6 +243,7 @@ public class QuestionsActivity extends AppCompatActivity {
     }
 
     public void displayQuestions(int k) {
+
 
         next.setEnabled(false);
         String[] option = {questionObjects.get(k).getOptionA(), questionObjects.get(k).getOptionB(), questionObjects.get(k).getOptionC(), questionObjects.get(k).getOptionD()};
@@ -225,9 +258,11 @@ public class QuestionsActivity extends AppCompatActivity {
         correctAnswer = questionObjects.get(k).getCorrect_answer();
         photoUrl = questionObjects.get(k).getQuestion_image();
         if(photoUrl.equals("null")){
+            textViewQuestion.setTextSize(30);
             questionImage.setVisibility(View.GONE);
         }
         else{
+            textViewQuestion.setTextSize(15);
             questionImage.setVisibility(View.VISIBLE);
             Glide.with(QuestionsActivity.this).load(photoUrl).into(questionImage);
         }

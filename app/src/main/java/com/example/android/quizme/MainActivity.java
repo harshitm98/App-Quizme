@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import java.util.Objects;
 
@@ -37,10 +38,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         scanButton = (Button)findViewById(R.id.scanner);
+        scanButton.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         nextActivityButton = (Button)findViewById(R.id.next_activity);
+        nextActivityButton.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         nextActivityButton.setEnabled(false);
         registrationNumber = (EditText)findViewById(R.id.registration_number);
+        registrationNumber.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         name = (EditText)findViewById(R.id.name);
+        name.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         qrScan = new IntentIntegrator(this);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -84,10 +89,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"Result not found",Toast.LENGTH_SHORT).show();
             }
             else{
-                questionSet = result.getContents();
+                questionSet = result.getContents().trim();
 
-                if(questionSet!=null){
+                if(questionSet.equals("A")||questionSet.equals("B")||questionSet.equals("C")||questionSet.equals("D")){
                     checker();
+                }
+                else{
+                    Toast.makeText(this,"Please make sure that you scanned the right QR code",Toast.LENGTH_SHORT).show();
                 }
             }
         } else {
@@ -100,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Please fill name and registeration number and then scan the QR code again!",Toast.LENGTH_LONG).show();
         }
         else{
-            Toast.makeText(this,registrationNumber.getText().toString() + name.getText().toString(),Toast.LENGTH_LONG).show();
             nextActivityButton.setEnabled(true);
         }
     }
