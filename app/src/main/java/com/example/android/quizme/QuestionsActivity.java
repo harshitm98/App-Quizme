@@ -12,6 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,8 +52,12 @@ public class QuestionsActivity extends AppCompatActivity {
 
     public String correctAnswer = "";
     public String selectedAnswer = "";
+    public LinearLayout layout;
+    public RelativeLayout relativeLayout;
 
     private String photoUrl;
+
+    public ProgressBar progressBar, imageProgressBar;
 
     @Override
     protected void onPause() {
@@ -76,13 +83,18 @@ public class QuestionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
 
-
+        progressBar = (ProgressBar)findViewById(R.id.progress);
         buttonA = (Button)findViewById(R.id.option_a);
         buttonB = (Button)findViewById(R.id.option_b);
         buttonC = (Button)findViewById(R.id.option_c);
         buttonD = (Button)findViewById(R.id.option_d);
         next = (Button)findViewById(R.id.next);
         textViewQuestion = (TextView)findViewById(R.id.question_text);
+        progressBar.setVisibility(View.VISIBLE);
+        layout = (LinearLayout)findViewById(R.id.linear_layout);
+        layout.setVisibility(View.INVISIBLE);
+        imageProgressBar = (ProgressBar)findViewById(R.id.image_progress);
+        relativeLayout = (RelativeLayout)findViewById(R.id.relative);
 
         buttonA.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         buttonB.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
@@ -123,6 +135,8 @@ public class QuestionsActivity extends AppCompatActivity {
                 questionObjects.add(questionObject);
 
                 if(questionObjects.size() == 10){
+                    progressBar.setVisibility(View.INVISIBLE );
+                    layout.setVisibility(View.VISIBLE);
                     Collections.shuffle(questionObjects);
                     displayQuestions(0);
                 }
@@ -258,10 +272,14 @@ public class QuestionsActivity extends AppCompatActivity {
         correctAnswer = questionObjects.get(k).getCorrect_answer();
         photoUrl = questionObjects.get(k).getQuestion_image();
         if(photoUrl.equals("null")){
+            relativeLayout.setVisibility(View.GONE);
+            imageProgressBar.setVisibility(View.GONE);
             textViewQuestion.setTextSize(30);
             questionImage.setVisibility(View.GONE);
         }
         else{
+            relativeLayout.setVisibility(View.VISIBLE);
+            imageProgressBar.setVisibility(View.VISIBLE);
             textViewQuestion.setTextSize(15);
             questionImage.setVisibility(View.VISIBLE);
             Glide.with(QuestionsActivity.this).load(photoUrl).into(questionImage);
