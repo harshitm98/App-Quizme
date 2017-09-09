@@ -1,6 +1,7 @@
 package com.example.android.quizme;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         nextActivityButton = (Button)findViewById(R.id.next_activity);
         nextActivityButton.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         nextActivityButton.setEnabled(false);
+        nextActivityButton.setVisibility(View.INVISIBLE);
         registrationNumber = (EditText)findViewById(R.id.registration_number);
         registrationNumber.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         name = (EditText)findViewById(R.id.name);
@@ -104,12 +106,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checker(){
-        if((Objects.equals(name.getText().toString(), "")) || (Objects.equals(registrationNumber.getText().toString(), ""))){
-            Toast.makeText(this,"Please fill name and registeration number and then scan the QR code again!",Toast.LENGTH_LONG).show();
+        String reg = registrationNumber.getText().toString().trim();
+        if(name.getText().toString().equals("") || registrationNumber.getText().toString().equals("")){
+            Toast.makeText(this,"Please fill name and registration number and then scan the QR code again!",Toast.LENGTH_LONG).show();
+        }
+        else if(name.getText().toString().length() != 9 || !reg.substring(0,2).equals("15") || !reg.substring(0,2).equals("16")
+                || !reg.substring(0,2).equals("13") || !reg.substring(0,2).equals("14") || !reg.substring(0,2).equals("17") ||
+                !reg.substring(2,3).equals("B") || !reg.substring(2,3).equals("M") || numberChecker(reg)){
+            Toast.makeText(this,"Make sure that you've registered right registration number", Toast.LENGTH_SHORT).show();
         }
         else{
+            nextActivityButton.setVisibility(View.VISIBLE);
             nextActivityButton.setEnabled(true);
         }
+    }
+
+    public boolean numberChecker(String registrationNumber){
+        int k;
+        for(int i=4;i<9;i++) {
+            k = (int) registrationNumber.charAt(i);
+            if (k < 48 || k > 57) {
+                return false;
+            }
+        }
+        for(int i=3;i<5;i++){
+            k = (int)registrationNumber.charAt(i);
+            if(k<65 || k>90){
+                return false;
+            }
+        }
+        return true;
     }
 
 

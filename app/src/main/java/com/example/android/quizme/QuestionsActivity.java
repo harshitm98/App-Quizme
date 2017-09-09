@@ -62,6 +62,8 @@ public class QuestionsActivity extends AppCompatActivity {
 
     private CountDownTimer timer;
 
+    public long min, sec;
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -264,8 +266,8 @@ public class QuestionsActivity extends AppCompatActivity {
         timer = new CountDownTimer(1200*60,1000) {
             @Override
             public void onTick(long l) {
-                long min = (l/1000)/60 - ((l/1000)%60)/60;
-                long sec = (l/1000)%60;
+                min = (l/1000)/60 - ((l/1000)%60)/60;
+                sec = (l/1000)%60;
 
                 if(min<10 && sec<10){
                     timerText.setText("0"+ min + ":" + "0"+ sec);
@@ -278,16 +280,19 @@ public class QuestionsActivity extends AppCompatActivity {
                 }
 
                 if(min == 1 && sec == 0){
-                    Toast.makeText(getApplicationContext(),"Last 1 minute left",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Last 1 minute left!",Toast.LENGTH_SHORT).show();
                     timerText.setTextColor(Color.RED);
                 }
             }
 
             @Override
             public void onFinish() {
+
                 Intent i = new Intent(QuestionsActivity.this, FinalResultActivity.class);
                 startActivity(i);
                 finishAffinity();
+
+
             }
         };
     }
