@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,7 +36,7 @@ import java.util.Objects;
 
 public class QuestionsActivity extends AppCompatActivity {
 
-    private TextView questionText, freezeText;
+    private TextView freezeText,timerText;
     private ImageView questionImage;
     private String set;
 
@@ -58,6 +59,8 @@ public class QuestionsActivity extends AppCompatActivity {
     private String photoUrl;
 
     public ProgressBar progressBar, imageProgressBar;
+
+    private CountDownTimer timer;
 
     @Override
     protected void onPause() {
@@ -106,6 +109,8 @@ public class QuestionsActivity extends AppCompatActivity {
         freezeText = (TextView)findViewById(R.id.freeze);
         questionImage = (ImageView)findViewById(R.id.question_image);
 
+        timerText = (TextView)findViewById(R.id.timer);
+
         set = "set" + MainActivity.questionSet;
         questionObjects = new ArrayList<QuestionObject>();
 
@@ -135,6 +140,7 @@ public class QuestionsActivity extends AppCompatActivity {
                 questionObjects.add(questionObject);
 
                 if(questionObjects.size() == 10){
+                    timer.start();
                     progressBar.setVisibility(View.INVISIBLE );
                     layout.setVisibility(View.VISIBLE);
                     Collections.shuffle(questionObjects);
@@ -254,6 +260,36 @@ public class QuestionsActivity extends AppCompatActivity {
                 selectedAnswer = buttonD.getText().toString();
             }
         });
+
+        timer = new CountDownTimer(1200*60,1000) {
+            @Override
+            public void onTick(long l) {
+                long min = (l/1000)/60 - ((l/1000)%60)/60;
+                long sec = (l/1000)%60;
+
+                if(min<10 && sec<10){
+                    timerText.setText("0"+ min + ":" + "0"+ sec);
+                }
+                else if(min<10 && sec>=10){
+                    timerText.setText("0" + min + ":" + sec);
+                }
+                else if(min>=10 && sec>=10){
+                    timerText.setText(min + ":" + sec);
+                }
+
+                if(min == 1 && sec == 0){
+                    Toast.makeText(getApplicationContext(),"Last 1 minute left",Toast.LENGTH_SHORT).show();
+                    timerText.setTextColor(Color.RED);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                Intent i = new Intent(QuestionsActivity.this, FinalResultActivity.class);
+                startActivity(i);
+                finishAffinity();
+            }
+        };
     }
 
     public void displayQuestions(int k) {
