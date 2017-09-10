@@ -2,14 +2,14 @@ package com.example.android.quizme;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -19,7 +19,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.vstechlab.easyfonts.EasyFonts;
 
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        scanButton.setBackgroundColor(Color.rgb(0, 103, 91));
+        nextActivityButton.setBackgroundColor(Color.rgb(0, 103, 91));
+
 
 
 
@@ -81,6 +83,50 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        registrationNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String reg = registrationNumber.getText().toString().trim();
+                if(registrationNumber.getText().toString().trim().length()!=9){
+                    registrationNumber.setError("Incorrect registration number");
+                }
+                if(reg.length()==9 && !(reg.charAt(0) == '1' && (reg.charAt(1) == '3' || reg.charAt(1) == '4' || reg.charAt(1) == '5' || reg.charAt(1) == '6' || reg.charAt(1) == '7'))){
+                    registrationNumber.setError("Incorrect registration number");
+                }
+                if(reg.length() == 9 && !(reg.charAt(2) == 'B' || reg.charAt(2) == 'M')){
+                    registrationNumber.setError("Incorrect registration number");
+                }
+                if(reg.length() == 9){
+                    int k;
+                    int z=1;
+                    for(int r=5;r<9;r++) {
+                        k = (int)reg.charAt(r);
+                        Log.i("MainActivity", "Num: " +k);
+                        if (k < 48 || k > 57) {
+                            z=0;
+                        }
+                    }
+                    for(int r=3;r<5;r++){
+                        k = (int)reg.charAt(r);
+                        Log.i("MainActivity", "Letters: " +k);
+                        if(k<65 || k>90){
+                            z=0;
+                        }
+                    }
+                    if(z==0)
+                    registrationNumber.setError("Incorrect registration number");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     @Override
@@ -107,36 +153,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void checker(){
         String reg = registrationNumber.getText().toString().trim();
+        Log.i("MainActivity",reg);
         if(name.getText().toString().equals("") || registrationNumber.getText().toString().equals("")){
             Toast.makeText(this,"Please fill name and registration number and then scan the QR code again!",Toast.LENGTH_LONG).show();
         }
-        else if(name.getText().toString().length() != 9 || !reg.substring(0,2).equals("15") || !reg.substring(0,2).equals("16")
-                || !reg.substring(0,2).equals("13") || !reg.substring(0,2).equals("14") || !reg.substring(0,2).equals("17") ||
-                !reg.substring(2,3).equals("B") || !reg.substring(2,3).equals("M") || numberChecker(reg)){
-            Toast.makeText(this,"Make sure that you've registered right registration number", Toast.LENGTH_SHORT).show();
-        }
+
         else{
             nextActivityButton.setVisibility(View.VISIBLE);
             nextActivityButton.setEnabled(true);
         }
     }
-
-    public boolean numberChecker(String registrationNumber){
-        int k;
-        for(int i=4;i<9;i++) {
-            k = (int) registrationNumber.charAt(i);
-            if (k < 48 || k > 57) {
-                return false;
-            }
-        }
-        for(int i=3;i<5;i++){
-            k = (int)registrationNumber.charAt(i);
-            if(k<65 || k>90){
-                return false;
-            }
-        }
-        return true;
-    }
-
 
 }

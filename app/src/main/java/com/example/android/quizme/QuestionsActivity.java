@@ -263,7 +263,7 @@ public class QuestionsActivity extends AppCompatActivity {
             }
         });
 
-        timer = new CountDownTimer(1200*60,1000) {
+        timer = new CountDownTimer(10000*60,1000) {
             @Override
             public void onTick(long l) {
                 min = (l/1000)/60 - ((l/1000)%60)/60;
