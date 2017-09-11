@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Quiz me</string>
+    <string name="registratin_number">Registration Number</string>
+    <string name="name">Name</string>
 </resources>
