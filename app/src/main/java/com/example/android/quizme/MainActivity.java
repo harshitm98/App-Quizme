@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         scanButton = (Button)findViewById(R.id.scanner);
         scanButton.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         nextActivityButton = (Button)findViewById(R.id.next_activity);
