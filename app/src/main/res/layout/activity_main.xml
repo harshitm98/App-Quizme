@@ -8,6 +8,22 @@
 
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="POWERED BY"
+            android:textSize="40sp"/>
+
+
+
+    </RelativeLayout>
+
+
 
         <EditText
             android:id="@+id/registration_number"
@@ -40,7 +56,7 @@
         android:layout_marginRight="16dp"
         android:layout_margin="8dp"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:background="@color/colorPrimaryDark"
+        android:background="?attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:textColor="@android:color/white"
         android:layout_height="wrap_content"
@@ -54,7 +70,7 @@
         android:layout_marginRight="16dp"
         android:layout_margin="8dp"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:background="@color/colorPrimaryDark"
+        android:background="?attr/selectableItemBackground"
         android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
