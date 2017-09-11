@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.quizme.FinalResultActivity">
 
     <TextView
-        android:id="@+id/result"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@+id/questions_solved_result"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="Your score is: "/>
+
+    <TextView
+        android:id="@+id/questions_solved_result"
+        android:textColor="@android:color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textSize="45sp"
-        tools:text="8/10" />
+        android:background="@drawable/magnitude_circle"
+        android:gravity="center"
+        tools:text="9" />
 
 
 </RelativeLayout>
