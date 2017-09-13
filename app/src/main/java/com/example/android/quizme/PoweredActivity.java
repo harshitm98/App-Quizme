@@ -1,11 +1,12 @@
 package com.example.android.quizme;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class PoweredActivity extends AppCompatActivity {
+public class PoweredActivity extends Activity {
 
     private CountDownTimer timer;
 
@@ -17,7 +18,6 @@ public class PoweredActivity extends AppCompatActivity {
         timer = new CountDownTimer(3000,1000) {
             @Override
             public void onTick(long l) {
-
             }
 
             @Override

@@ -1,8 +1,7 @@
 package com.example.android.quizme;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,10 +16,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.vstechlab.easyfonts.EasyFonts;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private Button scanButton;
     private IntentIntegrator qrScan;
@@ -39,15 +37,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         scanButton = (Button)findViewById(R.id.scanner);
-        scanButton.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
+        //scanButton.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         nextActivityButton = (Button)findViewById(R.id.next_activity);
-        nextActivityButton.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
+        //nextActivityButton.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         nextActivityButton.setEnabled(false);
         nextActivityButton.setVisibility(View.INVISIBLE);
         registrationNumber = (EditText)findViewById(R.id.registration_number);
-        registrationNumber.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
+        //registrationNumber.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         name = (EditText)findViewById(R.id.name);
-        name.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
+        //name.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         qrScan = new IntentIntegrator(this);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -60,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        scanButton.setBackgroundColor(Color.rgb(0, 103, 91));
-        nextActivityButton.setBackgroundColor(Color.rgb(0, 103, 91));
+
 
 
 

@@ -88,6 +88,7 @@ public class QuestionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
 
+        questionSolved = 0;
         progressBar = (ProgressBar)findViewById(R.id.progress);
         buttonA = (Button)findViewById(R.id.option_a);
         buttonB = (Button)findViewById(R.id.option_b);
