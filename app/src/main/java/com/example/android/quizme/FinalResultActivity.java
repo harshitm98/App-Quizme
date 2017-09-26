@@ -26,6 +26,7 @@ public class FinalResultActivity extends AppCompatActivity {
             case 3:
             case 4:
                 result.setBackground(getDrawable(R.drawable.circle_red));
+                result.setTextColor(Color.WHITE);
                 break;
             case 5:
             case 6:

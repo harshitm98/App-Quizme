@@ -56,17 +56,6 @@ public class QuestionObject {
 
     public QuestionObject(){    }
 
-//    public QuestionObject(String question_number,String question_text, String option1, String option2, String option3, String option4,
-//                          int correct_answer){
-//        this.question_number = question_number;
-//        this.question_text = question_text;
-//        this.option1 = option1;
-//        this.option2 = option2;
-//        this.option3 = option3;
-//        this.option4 = option4;
-//        this.correct_answer = correct_answer;
-//    }
-
     public String getQuestionNumber(){
         return question_number;
     }

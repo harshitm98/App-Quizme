@@ -166,18 +166,11 @@ public class QuestionsActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                String vFreeze = dataSnapshot.child("freeze").getValue(String.class);
-                Log.i("QuestionActivity", "" + dataSnapshot);
-                Log.i("QuestionActivity", "" + dataSnapshot.getValue().toString());
 
                 if(dataSnapshot.getValue().toString().equals("0")){
                     Log.i("QuestionActivity","Check1");
                     freezeText.setVisibility(View.GONE);
                 }
-//                if(Objects.equals(vFreeze.trim(), "0")){
-//                    freezeText.setVisibility(View.GONE);
-//                    Log.i("QuestionActivity", "Umm what is this?");
-//                }
             }
 
             @Override
@@ -204,9 +197,10 @@ public class QuestionsActivity extends AppCompatActivity {
                     displayQuestions(questionsAttempted);
                 }
                 else{
-                    Intent i = new Intent(QuestionsActivity.this, FinalResultActivity.class);
-                    startActivity(i);
-                    finishAffinity();
+                    timer.onFinish();
+//                    Intent i = new Intent(QuestionsActivity.this, FinalResultActivity.class);
+//                    startActivity(i);
+//                    finishAffinity();
                 }
                 buttonA.setBackgroundColor(Color.rgb(0, 103, 91));
                 buttonB.setBackgroundColor(Color.rgb(0, 103, 91));
@@ -288,12 +282,9 @@ public class QuestionsActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-
                 Intent i = new Intent(QuestionsActivity.this, FinalResultActivity.class);
                 startActivity(i);
                 finishAffinity();
-
-
             }
         };
     }
