@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -19,14 +22,13 @@ import com.google.zxing.integration.android.IntentResult;
 
 
 public class MainActivity extends Activity {
-
-    private Button scanButton;
-    private IntentIntegrator qrScan;
+    private static final String TAG = "MainActivity";
     public static String questionSet;
     private Button nextActivityButton;
-    public static String mRegistrationNumber, mName;
+    public static String mRegistrationNumber, mName, mClassNBR;
     public static EditText registrationNumber;
     public static EditText name;
+    private static EditText classNBR;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mCandidateReference, mInfoReference;
 
@@ -36,30 +38,13 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 
-        scanButton = (Button)findViewById(R.id.scanner);
-        //scanButton.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
         nextActivityButton = (Button)findViewById(R.id.next_activity);
-        //nextActivityButton.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
-        nextActivityButton.setEnabled(false);
-        nextActivityButton.setVisibility(View.INVISIBLE);
         registrationNumber = (EditText)findViewById(R.id.registration_number);
-        //registrationNumber.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
+        classNBR = (EditText)findViewById(R.id.classNBR);
         name = (EditText)findViewById(R.id.name);
-        //name.setTypeface(EasyFonts.walkwayUltraBold(getApplicationContext()));
-        qrScan = new IntentIntegrator(this);
+
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mCandidateReference = mFirebaseDatabase.getReference().child("candidates");
-
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                qrScan.initiateScan();
-            }
-        });
-
-
-
 
 
 
@@ -68,16 +53,18 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 mRegistrationNumber  = registrationNumber.getText().toString();
                 mName = name.getText().toString();
-                mCandidateReference.child(registrationNumber.getText().toString());
-                mInfoReference = mCandidateReference.child(registrationNumber.getText().toString());
-                mInfoReference.child("reg").setValue(mRegistrationNumber);
-                mInfoReference.child("name").setValue(name.getText().toString());
-                mInfoReference.child("freeze").setValue(0);
-                mInfoReference.child("questions_solved").setValue(0);
-                mInfoReference.child("questions_attempted").setValue(0);
-                Intent i = new Intent(MainActivity.this,QuestionsActivity.class);
-                startActivity(i);
-                finish();
+                mClassNBR = classNBR.getText().toString();
+                validateClassNBR();
+//                mCandidateReference.child(registrationNumber.getText().toString());
+//                mInfoReference = mCandidateReference.child(registrationNumber.getText().toString());
+//                mInfoReference.child("reg").setValue(mRegistrationNumber);
+//                mInfoReference.child("name").setValue(name.getText().toString());
+//                mInfoReference.child("freeze").setValue(0);
+//                mInfoReference.child("questions_solved").setValue(0);
+//                mInfoReference.child("questions_attempted").setValue(0);
+//                Intent i = new Intent(MainActivity.this,QuestionsActivity.class);
+//                startActivity(i);
+//                finish();
             }
         });
 
@@ -126,40 +113,49 @@ public class MainActivity extends Activity {
             }
         });
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
-        if(result!=null){
-            if(result.getContents()==null){
-                Toast.makeText(this,"Result not found",Toast.LENGTH_SHORT).show();
-            }
-            else{
-                questionSet = result.getContents().trim();
-
-                if(questionSet.equals("A")||questionSet.equals("B")||questionSet.equals("C")||questionSet.equals("D")){
-                    checker();
+    private void validateClassNBR(){
+        try{
+            mCandidateReference = mFirebaseDatabase.getReference("class").child(mClassNBR).child("classNBR");
+            DatabaseReference classNBRreferance = mCandidateReference.child("classNBR");
+            mCandidateReference.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    if(mClassNBR.equals(dataSnapshot.getValue())){
+                        validateTestStatus();
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this, "Class not found", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else{
-                    Toast.makeText(this,"Please make sure that you scanned the right QR code",Toast.LENGTH_SHORT).show();
-                }
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {                }
+            });
+        }catch(NullPointerException e){
+            Toast.makeText(this, "ClassNBR doesn't exist.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "validateClassNBR: "  + mCandidateReference);
         }
+
+
+
     }
-
-    public void checker(){
-        String reg = registrationNumber.getText().toString().trim();
-        Log.i("MainActivity",reg);
-        if(name.getText().toString().equals("") || registrationNumber.getText().toString().equals("")){
-            Toast.makeText(this,"Please fill name and registration number and then scan the QR code again!",Toast.LENGTH_LONG).show();
-        }
-
-        else{
-            nextActivityButton.setVisibility(View.VISIBLE);
-            nextActivityButton.setEnabled(true);
-        }
+    private void validateTestStatus(){
+        //TODO Check the status if the test is live or not
+    }
+    private void registrationChecker(){
+        //TODO Checks if the registration number is in the list
+    }
+    private void startTest(){
+        //TODO After validating all the changes initiate the test
     }
 
 }

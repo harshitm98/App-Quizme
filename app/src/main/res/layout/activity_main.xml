@@ -2,22 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="com.example.android.quizme.MainActivity">
 
     <LinearLayout
-        android:layout_marginTop="32dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp">
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="145dp"
             android:layout_height="145dp"
-            android:src="@mipmap/ic_launcher"
             android:layout_marginStart="8dp"
-            android:id="@+id/imageView" />
+            android:src="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -27,51 +27,58 @@
             <TextView
                 android:id="@+id/quiz_me_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textSize="45sp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="Quiz Me"
-                android:layout_marginTop="19dp" />
+                android:textColor="@android:color/white"
+                android:textSize="45sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:text="Created by: Harshit Maheshwari\nCreated for: Elangovan D\nv1.0"
-                 />
 
         </LinearLayout>
 
 
-
-
-
     </LinearLayout>
 
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/floating_nbr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColorHint="@android:color/white">
 
+        <EditText
+            android:id="@+id/classNBR"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="52dp"
+            android:layout_marginRight="52dp"
+            android:hint="Class NBR"
+            android:text="VL201718500"
+            android:inputType="textCapCharacters"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
 
-
-
-
-
+    </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:id="@+id/floating_reg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@android:color/white"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/floating_nbr"
+        android:textColorHint="@android:color/white">
 
         <EditText
             android:id="@+id/registration_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="52dp"
             android:layout_marginRight="52dp"
             android:hint="@string/registratin_number"
+            android:inputType="textCapCharacters"
             android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
-            android:layout_centerHorizontal="true"
-            android:inputType="textCapCharacters" />
+            android:textColorHint="@android:color/white" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -79,60 +86,45 @@
         android:id="@+id/floating_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@android:color/white"
-        android:layout_below="@+id/floating_reg">
+        android:layout_below="@+id/floating_reg"
+        android:textColorHint="@android:color/white">
 
         <EditText
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/name"
-            android:textColor="@android:color/white"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="52dp"
             android:layout_marginRight="52dp"
-            android:layout_centerHorizontal="true"
-            android:inputType="textCapWords"/>
+            android:hint="@string/name"
+            android:inputType="textCapWords"
+            android:textColor="@android:color/white" />
 
     </android.support.design.widget.TextInputLayout>
 
 
-
-
-
-
     <LinearLayout
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/next_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
-            android:layout_margin="8dp"
             android:background="@drawable/button_bg"
-            android:layout_width="match_parent"
-            android:textColor="@android:color/white"
-            android:layout_height="wrap_content"
-            android:text="Start the test"/>
+            android:text="Start the test"
+            android:textColor="@android:color/white" />
 
-        <Button
-            android:id="@+id/scanner"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_margin="8dp"
-            android:background="@drawable/button_bg"
-            android:textColor="@android:color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Scan qr"/>
 
     </LinearLayout>
-
 
 
 </RelativeLayout>
