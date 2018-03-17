@@ -37,8 +37,6 @@ import java.util.Objects;
 public class QuestionsActivity extends AppCompatActivity {
 
     private TextView freezeText,timerText;
-    private ImageView questionImage;
-    private String set;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mQuestionsDatabaseReference, mCandidateDatabaseReference, mInfoCandidateReference;
@@ -110,11 +108,8 @@ public class QuestionsActivity extends AppCompatActivity {
 
 
         freezeText = (TextView)findViewById(R.id.freeze);
-        questionImage = (ImageView)findViewById(R.id.question_image);
 
         timerText = (TextView)findViewById(R.id.timer);
-
-        set = "set" + MainActivity.questionSet;
         questionObjects = new ArrayList<QuestionObject>();
 
         ArrayList<Integer> questionSequenceShuffle = new ArrayList<>();
@@ -125,8 +120,8 @@ public class QuestionsActivity extends AppCompatActivity {
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mQuestionsDatabaseReference = mFirebaseDatabase.getReference().child("questions").child(set);
-        mCandidateDatabaseReference = mFirebaseDatabase.getReference().child("candidates").child(MainActivity.mRegistrationNumber);
+        mQuestionsDatabaseReference = mFirebaseDatabase.getReference().child("class").child(MainActivity.mClassNBR).child("questions");
+        mCandidateDatabaseReference = mFirebaseDatabase.getReference().child("class").child(MainActivity.mClassNBR).child("candidates").child(MainActivity.mRegistrationNumber);
         //Log.i("QuestionsActivity",MainActivity.mRegistrationNumber);
         mChildEventListener = new ChildEventListener() {
             @Override
@@ -138,7 +133,6 @@ public class QuestionsActivity extends AppCompatActivity {
                 questionObject.setOption2(dataSnapshot.child("option2").getValue().toString());
                 questionObject.setOption3(dataSnapshot.child("option3").getValue().toString());
                 questionObject.setOption4(dataSnapshot.child("option4").getValue().toString());
-                questionObject.setQuestion_image(dataSnapshot.child("question_image").getValue().toString());
 
                 questionObjects.add(questionObject);
 
@@ -198,9 +192,6 @@ public class QuestionsActivity extends AppCompatActivity {
                 }
                 else{
                     timer.onFinish();
-//                    Intent i = new Intent(QuestionsActivity.this, FinalResultActivity.class);
-//                    startActivity(i);
-//                    finishAffinity();
                 }
                 buttonA.setBackgroundColor(Color.rgb(0, 103, 91));
                 buttonB.setBackgroundColor(Color.rgb(0, 103, 91));
@@ -303,20 +294,9 @@ public class QuestionsActivity extends AppCompatActivity {
         buttonD.setText(optionList.get(3));
         textViewQuestion.setText(questionObjects.get(k).getQuestionText());
         correctAnswer = questionObjects.get(k).getCorrect_answer();
-        photoUrl = questionObjects.get(k).getQuestion_image();
-        if(photoUrl.equals("null")){
-            relativeLayout.setVisibility(View.GONE);
-            imageProgressBar.setVisibility(View.GONE);
-            textViewQuestion.setTextSize(30);
-            questionImage.setVisibility(View.GONE);
-        }
-        else{
-            relativeLayout.setVisibility(View.VISIBLE);
-            imageProgressBar.setVisibility(View.VISIBLE);
-            textViewQuestion.setTextSize(15);
-            questionImage.setVisibility(View.VISIBLE);
-            Glide.with(QuestionsActivity.this).load(photoUrl).into(questionImage);
-        }
+        relativeLayout.setVisibility(View.GONE);
+        imageProgressBar.setVisibility(View.GONE);
+
 
     }
 }

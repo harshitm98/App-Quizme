@@ -56,12 +56,7 @@ public class MainActivity extends Activity {
                 mClassNBR = classNBR.getText().toString();
                 validateClassNBR();
 //                mCandidateReference.child(registrationNumber.getText().toString());
-//                mInfoReference = mCandidateReference.child(registrationNumber.getText().toString());
-//                mInfoReference.child("reg").setValue(mRegistrationNumber);
-//                mInfoReference.child("name").setValue(name.getText().toString());
-//                mInfoReference.child("freeze").setValue(0);
-//                mInfoReference.child("questions_solved").setValue(0);
-//                mInfoReference.child("questions_attempted").setValue(0);
+
 //                Intent i = new Intent(MainActivity.this,QuestionsActivity.class);
 //                startActivity(i);
 //                finish();
@@ -115,13 +110,41 @@ public class MainActivity extends Activity {
     }
     private void validateClassNBR(){
         try{
-            mCandidateReference = mFirebaseDatabase.getReference("class").child(mClassNBR).child("classNBR");
+            mCandidateReference = mFirebaseDatabase.getReference("class");
             DatabaseReference classNBRreferance = mCandidateReference.child("classNBR");
+            Log.d(TAG, "validateClassNBR: " + classNBRreferance);
             mCandidateReference.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    if(mClassNBR.equals(dataSnapshot.getValue())){
-                        validateTestStatus();
+                    Log.d(TAG, "onChildAdded: " + dataSnapshot.getValue());
+                    if(mClassNBR.equals(dataSnapshot.child("classNBR").getValue())){
+                        String status;
+                        status = dataSnapshot.child("status").getValue().toString();
+                        if(status.equals("0")){
+                            Toast.makeText(MainActivity.this, "Test is not live.", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            String reg = dataSnapshot.child("studentList").getValue().toString();
+                            if(reg.contains(mRegistrationNumber)){
+                                try{
+                                    if(dataSnapshot.child("candidates").child(mRegistrationNumber).child("reg").getValue().toString().equals(mRegistrationNumber)){
+                                        Toast.makeText(MainActivity.this, "Don't be sneaky. You have already taken the test", Toast.LENGTH_SHORT).show();
+                                    }
+                                }catch(NullPointerException e){
+                                    e.printStackTrace();
+                                    Log.d(TAG, "onChildAdded: Null pointer bro");
+                                    studentInfoToDatabase();
+                                    Intent intent = new Intent(MainActivity.this,QuestionsActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+
+                            }
+                            else{
+                                Toast.makeText(MainActivity.this, "Registration not found", Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
                     else{
                         Toast.makeText(MainActivity.this, "Class not found", Toast.LENGTH_SHORT).show();
@@ -144,18 +167,15 @@ public class MainActivity extends Activity {
             Toast.makeText(this, "ClassNBR doesn't exist.", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "validateClassNBR: "  + mCandidateReference);
         }
-
-
-
     }
-    private void validateTestStatus(){
-        //TODO Check the status if the test is live or not
-    }
-    private void registrationChecker(){
-        //TODO Checks if the registration number is in the list
-    }
-    private void startTest(){
-        //TODO After validating all the changes initiate the test
+
+    void studentInfoToDatabase(){
+        mInfoReference = mCandidateReference.child(mClassNBR).child("candidates").child(registrationNumber.getText().toString());
+        mInfoReference.child("reg").setValue(mRegistrationNumber);
+        mInfoReference.child("name").setValue(name.getText().toString());
+        mInfoReference.child("freeze").setValue(0);
+        mInfoReference.child("questions_solved").setValue(0);
+        mInfoReference.child("questions_attempted").setValue(0);
     }
 
 }
