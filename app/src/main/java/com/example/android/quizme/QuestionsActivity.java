@@ -36,10 +36,12 @@ import java.util.Objects;
 
 public class QuestionsActivity extends AppCompatActivity {
 
+    private static final String TAG = "QuestionsActivity";
+
     private TextView freezeText,timerText;
 
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mQuestionsDatabaseReference, mCandidateDatabaseReference, mCandidatesDatabaseReference;
+    private DatabaseReference mQuestionsDatabaseReference, mCandidateDatabaseReference, mCandidatesDatabaseReference, mClassReferenece;
     private ChildEventListener mChildEventListener, mCandidateChildEventListener;
 
     public ArrayList<QuestionObject> questionObjects;
@@ -120,6 +122,7 @@ public class QuestionsActivity extends AppCompatActivity {
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mClassReferenece = mFirebaseDatabase.getReference().child("class").child(MainActivity.mClassNBR);
         mQuestionsDatabaseReference = mFirebaseDatabase.getReference().child("class").child(MainActivity.mClassNBR).child("questions");
         mCandidateDatabaseReference = mFirebaseDatabase.getReference().child("class").child(MainActivity.mClassNBR).child("candidates").child(MainActivity.mRegistrationNumber);
         mCandidatesDatabaseReference = mFirebaseDatabase.getReference().child("class").child(MainActivity.mClassNBR).child("candidates");
@@ -183,6 +186,31 @@ public class QuestionsActivity extends AppCompatActivity {
 
         mQuestionsDatabaseReference.addChildEventListener(mChildEventListener);
         mCandidatesDatabaseReference.addChildEventListener(mCandidateChildEventListener);
+
+        mClassReferenece.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                if(dataSnapshot.getValue().toString().equals("0")){
+                    Toast.makeText(QuestionsActivity.this, "Teacher has closed the test", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(QuestionsActivity.this, FinalResultActivity.class);
+                    startActivity(i);
+                    finishAffinity();
+                }
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {            }
+        });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
