@@ -39,7 +39,7 @@ public class QuestionsActivity extends AppCompatActivity {
     private TextView freezeText,timerText;
 
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mQuestionsDatabaseReference, mCandidateDatabaseReference, mInfoCandidateReference;
+    private DatabaseReference mQuestionsDatabaseReference, mCandidateDatabaseReference, mCandidatesDatabaseReference;
     private ChildEventListener mChildEventListener, mCandidateChildEventListener;
 
     public ArrayList<QuestionObject> questionObjects;
@@ -122,6 +122,7 @@ public class QuestionsActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mQuestionsDatabaseReference = mFirebaseDatabase.getReference().child("class").child(MainActivity.mClassNBR).child("questions");
         mCandidateDatabaseReference = mFirebaseDatabase.getReference().child("class").child(MainActivity.mClassNBR).child("candidates").child(MainActivity.mRegistrationNumber);
+        mCandidatesDatabaseReference = mFirebaseDatabase.getReference().child("class").child(MainActivity.mClassNBR).child("candidates");
         //Log.i("QuestionsActivity",MainActivity.mRegistrationNumber);
         mChildEventListener = new ChildEventListener() {
             @Override
@@ -160,11 +161,16 @@ public class QuestionsActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                if(dataSnapshot.getValue().toString().equals("0")){
-                    Log.i("QuestionActivity","Check1");
-                    freezeText.setVisibility(View.GONE);
+                if(dataSnapshot.child("reg").getValue().toString().equals(MainActivity.mRegistrationNumber)){
+                    if(dataSnapshot.child("freeze").getValue().toString().equals("0")){
+                        Log.i("QuestionActivity","Check1");
+                        freezeText.setVisibility(View.GONE);
+                    }
+                    if(dataSnapshot.child("freeze").getValue().toString().equals("1")){
+                        freezeTheText();
+                    }
                 }
+
             }
 
             @Override
@@ -176,7 +182,7 @@ public class QuestionsActivity extends AppCompatActivity {
         };
 
         mQuestionsDatabaseReference.addChildEventListener(mChildEventListener);
-        mCandidateDatabaseReference.addChildEventListener(mCandidateChildEventListener);
+        mCandidatesDatabaseReference.addChildEventListener(mCandidateChildEventListener);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
