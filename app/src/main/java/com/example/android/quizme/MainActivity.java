@@ -147,7 +147,7 @@ public class MainActivity extends Activity {
                         }
                     }
                     else{
-                        Toast.makeText(MainActivity.this, "Class not found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Finding class", Toast.LENGTH_SHORT).show();
                     }
                 }
 
