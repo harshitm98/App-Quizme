@@ -1,13 +1,16 @@
 package com.example.android.quizme;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class FinalResultActivity extends AppCompatActivity {
 
-    public TextView result;
+    public TextView result, feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +19,16 @@ public class FinalResultActivity extends AppCompatActivity {
 
         result = (TextView)findViewById(R.id.questions_solved_result);
         result.setText(QuestionsActivity.questionSolved + "");
+        feedback = (TextView)findViewById(R.id.feedback);
+        feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FinalResultActivity.this, FeedbackActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
 
 

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/complete_layout"
     tools:context="com.example.android.quizme.FinalResultActivity">
 
     <TextView
@@ -25,6 +26,16 @@
         android:background="@drawable/magnitude_circle"
         android:gravity="center"
         tools:text="9" />
+
+    <TextView
+        android:id="@+id/feedback"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Would like to get back to team?\n For feedback click here!"/>
 
 
 </RelativeLayout>

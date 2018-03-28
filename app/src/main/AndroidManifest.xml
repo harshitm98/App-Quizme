@@ -12,23 +12,23 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            >
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".QuestionsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".FinalResultActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".PoweredActivity"
+        <activity
+            android:name=".PoweredActivity"
             android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FeedbackActivity"></activity>
     </application>
 
 </manifest>
